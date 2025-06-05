@@ -1,6 +1,7 @@
 package PersonMatching;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Person {
     String name;
@@ -37,5 +38,10 @@ public class Person {
         return sisters;
     }
 
+    public static void buildNewRelation(Person person, HashMap<String,Person> family){
+         Person personfather=person.father;
+         Person personmother=person.mother;
 
+
+    }
 }
