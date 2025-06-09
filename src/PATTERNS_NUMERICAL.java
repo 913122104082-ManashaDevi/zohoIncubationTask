@@ -1,18 +1,17 @@
-import java.util.Arrays;
-public class Main {
+public class PATTERNS_NUMERICAL {
     public static void main(String[] args){
        // pattern1(3);
         System.out.println("**************************");
         //pattern2(4);
-       // babylonionSquareRoot(16);
+        // babylonionSquareRoot(16);
         //siameseMagicSquare(3);
         //sqvalue(5);
-       // problem5();
+        // problem5();
         //diagonalsquare();
-       // apgp(5, 3,5,"ap");
+        // apgp(5, 3,5,"ap");
         //AlternateSort();
-        decimalToDifferentFormat(586, 26);
-       // CompressString("AAAABBRCNDDD");
+        //decimalToDifferentFormat(586, 26);
+        // CompressString("AAAABBRCNDDD");
         System.out.println("**************************");
 
     }
@@ -244,55 +243,55 @@ public class Main {
     }
 
 
-//        public static void diagonalsquare() {
-//            int n = 8;
-//            int num = 1;
-//            int sign = 1;
-//
-//
-//            for (int i = 1; i <= n; i++) {
-//                num = 0;
-//                int limit = (i % 2 == 1) ? i / 2 + 1 : i / 2;
-//
-//
-//                for (int k = 1; k <= n - i; k++)
-//                    System.out.print(" ");
-//                for (int j = 1; j <= i; j++) {
-//                    num = num + sign;
-//                    System.out.print(num + " ");
-//
-//                    if (j == limit) {
-//                        if (i % 2 == 0) {
-//                            System.out.print(num + " ");
-//                            j++;
-//                        }
-//                        sign = -1;
-//                    }
-//                }
-//                sign = 1;
-//                System.out.println();
-//            }
-//
-//            for (int i = n - 1; i >= 1; i--) {
-//                num = 0;
-//                int limit = (i % 2 == 1) ? i / 2 + 1 : i / 2;
-//                for (int k = 1; k <= n - i; k++)
-//                    System.out.print(" ");
-//                for (int j = 1; j <= i; j++) {
-//                    num = num + sign;
-//                    System.out.print(num + " ");
-//                    if (j == limit) {
-//                        if (i % 2 == 0) {
-//                            System.out.print(num + " ");
-//                            j++;
-//                        }
-//                        sign = -1;
-//                    }
-//                }
-//                sign = 1;
-//                System.out.println();
-//            }
-//        }
+        public static void diagonalsquare1() {
+            int n = 8;
+            int num = 1;
+            int sign = 1;
+
+
+            for (int i = 1; i <= n; i++) {
+                num = 0;
+                int limit = (i % 2 == 1) ? i / 2 + 1 : i / 2;
+
+
+                for (int k = 1; k <= n - i; k++)
+                    System.out.print(" ");
+                for (int j = 1; j <= i; j++) {
+                    num = num + sign;
+                    System.out.print(num + " ");
+
+                    if (j == limit) {
+                        if (i % 2 == 0) {
+                            System.out.print(num + " ");
+                            j++;
+                        }
+                        sign = -1;
+                    }
+                }
+                sign = 1;
+                System.out.println();
+            }
+
+            for (int i = n - 1; i >= 1; i--) {
+                num = 0;
+                int limit = (i % 2 == 1) ? i / 2 + 1 : i / 2;
+                for (int k = 1; k <= n - i; k++)
+                    System.out.print(" ");
+                for (int j = 1; j <= i; j++) {
+                    num = num + sign;
+                    System.out.print(num + " ");
+                    if (j == limit) {
+                        if (i % 2 == 0) {
+                            System.out.print(num + " ");
+                            j++;
+                        }
+                        sign = -1;
+                    }
+                }
+                sign = 1;
+                System.out.println();
+            }
+        }
     public static void diagonalsquare() {
         int n = 8;
         for (int i = 1; i <= (2 * n - 1); i++) {
