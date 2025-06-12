@@ -3,6 +3,16 @@ package LangtonsAntProblem;
 import java.util.Scanner;
 
 public class LangtonsAntProblem {
+    private static final int[][] move = { {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
+    private static final int[] Direction={4,3,1,2,3,4,2,1};
+    public class Ant{
+        int row=0,col=0,dir=0;
+        public Ant(int row,int col,int dir){
+            this.row=row;
+            this.col=col;
+            this.dir=dir;
+        }
+    }
    public static void main(String arg[]){
        Scanner sc=new Scanner(System.in);
        System.out.println("Enter no of rows for Grid :");
@@ -33,9 +43,10 @@ public class LangtonsAntProblem {
               break;
           else
               ant=newAnt;
+           System.out.println("Ant Postion :" +" Row :"+ant[0]+" Column :"+ant[1]+ "  Direction :"+ant[2]);
        }
-       System.out.println("Ant Postion :" +" Row :"+ant[0]+" Column :"+ant[1]);
-       printGrid(grid,rows,cols);
+       System.out.println("Ant Postion :" +" Row :"+ant[0]+" Column :"+ant[1]+ " Direction :"+ant[2]);
+       //printGrid(grid,rows,cols);
 
    }
 
@@ -58,15 +69,8 @@ public class LangtonsAntProblem {
     {
         int color= grid[ant[0]][ant[1]];
         grid[ant[0]][ant[1]]=1-color;
-        int[][] move = {  {0, -1}, {0, 1}, {-1, 0}, {1, 0} };
-        int[] whiteDirection={4,3,1,2};
-        int[] blackDirection={3,4,2,1};
-
         int dir=ant[2]-1;
-        if (color == 0)
-            dir=whiteDirection[dir];
-        else
-            dir=blackDirection[dir];
+        dir=Direction[color*4 + dir];
         int row=ant[0]+move[dir-1][0];
         int col=ant[1]+move[dir-1][1];
         return new int[]{row,col,dir};

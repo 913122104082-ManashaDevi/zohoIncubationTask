@@ -1,0 +1,294 @@
+package MultiplyEquations;
+
+import java.util.ArrayList;
+
+public class WholeEquation {
+
+    private ArrayList<Equation> terms = new ArrayList<>();
+
+
+    public WholeEquation() {
+    }
+
+    public WholeEquation(String input) {
+        input = input.replace(" ", "").replaceAll("(?=[+-])", " ");
+        for (String term : input.trim().split(" ")) {
+            if (!term.isEmpty()) {
+                terms.add(new Equation(term));
+            }
+        }
+    }
+
+    public static WholeEquation multiply(WholeEquation eq1, WholeEquation eq2) {
+        WholeEquation result = new WholeEquation();
+
+        for (Equation term1 : eq1.terms) {
+            for (Equation term2 : eq2.terms) {
+                result.terms.add(term1.multiply(term2));
+            }
+        }
+        result.combineLikeTerms();
+        return result;
+    }
+
+    private void combineLikeTerms() {
+        for (int i = 0; i < terms.size(); i++) {
+            Equation term1 = terms.get(i);
+            for (int j = i + 1; j < terms.size(); j++) {
+                Equation term2 = terms.get(j);
+                if (term1.isLikeTerm(term2)) {
+                    term1.coef += term2.coef;
+                    terms.remove(j);
+                    j--;
+                }
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        for (Equation term : terms) {
+            if (term.coef == 0) continue;
+            output.append(term);
+        }
+        return output.toString();
+    }
+
+    public void printTerms() {
+        for (Equation term : terms) {
+            System.out.println(term);
+        }
+    }
+
+    public static void main(String[] args) {
+        WholeEquation eq1 = new WholeEquation("8xy + 8x^2y^3 - 9xyz");
+        WholeEquation eq2 = new WholeEquation("2x - y^3");
+
+        WholeEquation result = WholeEquation.multiply(eq1, eq2);
+
+        System.out.println("Result:");
+        System.out.println(result);
+    }
+}
+package MultiplyEquations;
+
+public class Equation {
+
+    String[] variables = new String[10];
+    int[] powers = new int[10];
+    int coef;
+    int numParts;
+
+    public Equation(String term) {
+        coef = 1;
+        int i = 0;
+        if (term.startsWith("-")) {
+            coef = -1;
+            i++;
+        } else if (term.startsWith("+")) {
+            i++;
+        }
+
+        StringBuilder number = new StringBuilder();
+        while (i < term.length() && Character.isDigit(term.charAt(i))) {
+            number.append(term.charAt(i));
+            i++;
+        }
+
+        coef *= number.length() > 0 ? Integer.parseInt(number.toString()) : 1;
+
+        int index = 0;
+        while (i < term.length() && index < 10) {
+            char ch = term.charAt(i);
+            if (Character.isLetter(ch)) {
+                variables[index] = String.valueOf(ch);
+                i++;
+
+                int power = 1;
+                if (i < term.length() && term.charAt(i) == '^') {
+                    i++;
+                    StringBuilder powStr = new StringBuilder();
+                    while (i < term.length() && Character.isDigit(term.charAt(i))) {
+                        powStr.append(term.charAt(i));
+                        i++;
+                    }
+                    power = Integer.parseInt(powStr.toString());
+                }
+
+                powers[index] = power;
+                index++;
+            } else {
+                i++;
+            }
+        }
+
+        numParts = index;
+    }
+
+    public Equation multiply(Equation other) {
+        Equation result = new Equation("+1");
+        result.coef = this.coef * other.coef;
+
+        for (int i = 0; i < this.numParts; i++) {
+            result.variables[i] = this.variables[i];
+            result.powers[i] = this.powers[i];
+        }
+
+        int resultIndex = this.numParts;
+
+        for (int j = 0; j < other.numParts; j++) {
+            boolean merged = false;
+            for (int i = 0; i < resultIndex; i++) {
+                if (result.variables[i].equals(other.variables[j])) {
+                    result.powers[i] += other.powers[j];
+                    merged = true;
+                    break;
+                }
+            }
+            if (!merged && resultIndex < 10) {
+                result.variables[resultIndex] = other.variables[j];
+                result.powers[resultIndex] = other.powers[j];
+                resultIndex++;
+            }
+        }
+
+        result.numParts = resultIndex;
+        return result;
+    }
+
+    public boolean isLikeTerm(Equation other) {
+        if (this.numParts != other.numParts) return false;
+
+        for (int i = 0; i < numParts; i++) {
+            boolean matched = false;
+            for (int j = 0; j < other.numParts; j++) {
+                if (this.variables[i].equals(other.variables[j]) && this.powers[i] == other.powers[j]) {
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(coef > 0 ? "+" : "").append(coef);
+        for (int i = 0; i < numParts; i++) {
+            sb.append(variables[i]);
+            if (powers[i] != 1) {
+                sb.append("^").append(powers[i]);
+            }
+        }
+        return sb.toString();
+    }
+}
+
+
+
+// heap
+
+
+    private static int findMin(int arr[], int left, int right) {
+        int min = left;
+        for (int i = left + 1; i <= right; i++) {
+            if (arr[i] < arr[min])
+                min = i;
+        }
+        return min;
+    }
+    private static int findMax(int arr[], int left, int right) {
+        int max= left;
+        for (int i = left + 1; i <= right; i++) {
+            if (arr[i] > arr[max])
+                max = i;
+        }
+        return max;
+    }
+
+    public static Node constructMaxHeap(int arr[], int left, int right)
+    {
+        if (left > right)
+            return null;
+        int max = findMax(arr, left, right);
+        Node node = new Node(arr[max]);
+        node.left = constructMaxHeap(arr, left, max - 1);
+        node.right = constructMaxHeap(arr, max + 1, right);
+        return node;
+    }
+    public static Node constructMinHeap(int arr[], int left, int right)
+    {
+        if (left > right)
+            return null;
+        int max = findMin(arr, left, right);
+        Node node = new Node(arr[max]);
+        node.left = constructMinHeap(arr, left, max - 1);
+        node.right = constructMinHeap(arr, max + 1, right);
+        return node;
+    }
+
+
+
+
+    package HeapPackage;
+
+        public class Main {
+            public static void main(String[] args) {
+                int[] arr = {11, 12, 13, 35, 21, 18, 25, 17};
+                Node root = constructMaxHeap(arr);
+                System.out.println("Inorder Traversal: " + root.inorder(root));
+            }
+
+            // Construct tree as a binary heap
+            public static Node constructMaxHeap(int[] arr) {
+                Node[] nodes = new Node[arr.length];
+                for (int i = 0; i < arr.length; i++) {
+                    nodes[i] = new Node(arr[i]);
+                }
+
+                // Build tree structure
+                for (int i = 0; i < arr.length; i++) {
+                    int left = 2 * i + 1;
+                    int right = 2 * i + 2;
+                    if (left < arr.length) nodes[i].left = nodes[left];
+                    if (right < arr.length) nodes[i].right = nodes[right];
+                }
+
+                // Apply heapify from bottom up
+                for (int i = arr.length / 2 - 1; i >= 0; i--) {
+                    heapify(nodes[i]);
+                }
+
+                return nodes[0]; // root of heap
+            }
+
+            // Heapify (max-heap) assuming subtrees are already heaps
+            private static void heapify(Node root) {
+                if (root == null) return;
+
+                Node largest = root;
+
+                if (root.left != null && root.left.value > largest.value) {
+                    largest = root.left;
+                }
+
+                if (root.right != null && root.right.value > largest.value) {
+                    largest = root.right;
+                }
+
+                if (largest != root) {
+                    int temp = root.value;
+                    root.value = largest.value;
+                    largest.value = temp;
+
+                    heapify(largest); // Recurse on the subtree
+                }
+            }
+        }
+
+
+
